@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Sweetest Dairymilk</title>
+    <style>
+        /* CSS Reset & Google Fonts */
+        @import url('https://googleapis.com');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fbeee6 0%, #f3dcd4 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #4a2c2a;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* Hero Header Section */
+        header {
+            padding: 80px 20px 40px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 4.5rem;
+            color: #7b3f00; /* Chocolate tone */
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: heartbeat 1.5s infinite alternate;
+        }
+
+        .romantic-line {
+            font-size: 1.3rem;
+            font-style: italic;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            color: #924e49;
+            font-weight: 300;
+        }
+
+        /* 5 Photos Grid Layout */
+        .gallery-container { 
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .photo-card {
+            background: #fff;
+            padding: 15px 15px 40px 15px;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(123, 63, 0, 0.15);
+            transform: rotate(var(--r));
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .photo-card:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 15px 35px rgba(123, 63, 0, 0.25);
+            z-index: 10;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 2px;
+            border: 1px solid #eee;
+        }
+
+        .photo-card::after {
+            content: "💝";
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+        }
+
+        /* Interactive Floating Hearts */
+        .heart {
+            position: relative;
+            font-size: 1.5rem;
+            user-select: none;
+            pointer-events: none;
+            animation: floatUp var(--t) linear forwards;
+            z-index: 100;
+        }
+
+        /* Music Floating Control */
+        .audio-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #7b3f00;
+            color: #fff;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(123, 63, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .audio-control:hover {
+            transform: scale(1.1);
+            background: #924e49;
+        }
+
+        /* Animations */
+        @keyframes heartbeat {
+            to { transform: scale(1.03); }
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1) translateX(var(--x));
+                opacity: 0;
+            }
+        }
+
+        footer {
+            margin: 60px 0 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Music Audio Tag -->
+    <audio id="bg-music" src="love.mp3.mp3" loop></audio>
+
+    <!-- Floating Audio Button -->
+    <button class="audio-control" id="music-btn" aria-label="Toggle Music">🎵</button>
+
+    <header>
+        <h1>Hey Dairymilk! 🍫</h1>
+        <p class="romantic-line">
+            "Just like my favourite chocolate, you bring sweetness, warmth, and complete joy to my world. Life with you is a little sweeter every single day."
+        </p>
+    </header>
+
+    <div class="gallery-container">
+        <div class="grid">
+            <div class="photo-card" style="--r: -3deg;">
+                <img src="1.jpg.jpeg" alt="Dairymilk Pic 1">
+            </div>
+            <div class="photo-card" style="--r: 2deg;">
+                <img src="6.jpg.jpeg" alt="Dairymilk Pic 2">
+            </div>
+            <div class="photo-card" style="--r: -1deg;">
+                <img src="3.jpg.jpeg" alt="Dairymilk Pic 3">
+            </div>
+            <div class="photo-card" style="--r: 4deg;">
+                <img src="4.jpg.jpeg" alt="Dairymilk Pic 4">
+            </div>
+            <div class="photo-card" style="--r: -4deg;">
+                <img src="5.jpg.jpeg" alt="Dairymilk Pic 5">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made with ❤️ just for you</p>
+    </footer>
+
+    <script>
+        // Floating hearts generation logic
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            const models = ['❤️', '💖', '🍫', '✨', '💝'];
+            heart.innerText = models[Math.floor(Math.random() * models.length)];
+            
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.setProperty('--x', (Math.random() * 200 - 100) + "px");
+            
+            const duration = Math.random() * 3 + 3;
+            heart.style.setProperty('--t', duration + "s");
+            
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+        setInterval(createHeart, 400);
+
+        // Music interaction and control logic
+        const music = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+
+        // Play music on first interaction (bypasses browser autoplay restrictions)
+        function startMusicOnInteraction() {
+            music.play().then(() => {
+                musicBtn.innerText = '🔊';
+                // Remove listeners once it starts playing successfully
+                document.removeEventListener('click', startMusicOnInteraction);
+                document.removeEventListener('touchstart', startMusicOnInteraction);
+            }).catch(error => {
+                console.log("Autoplay blocked, waiting for explicit toggle button click.");
+            });
+        }
+        document.addEventListener('click', startMusicOnInteraction);
+        document.addEventListener('touchstart', startMusicOnInteraction);
+
+        // Manual toggle button action
+        musicBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Stops the document click listener from firing again
+            if (music.paused) {
+                music.play();
+                musicBtn.innerText = '🔊';
+            } else {
+                music.pause();
+                musicBtn.innerText = '🔇';
+            }
+        });
+    </script>
+</body>
+</html>
