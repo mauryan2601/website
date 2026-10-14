@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DairyMilk 💜</title>
+  <meta name="description" content="A special little website made with love for DairyMilk" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #12001f;
+      color: #ffffff;
+      overflow-x: hidden;
+      position: relative;
+      selection-background-color: #d946ef;
+    }
+
+    /* Ambient animated gradient background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(142, 68, 173, 0.35), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.3), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(91, 33, 182, 0.4), transparent 50%),
+        radial-gradient(circle at 70% 20%, rgba(236, 72, 153, 0.25), transparent 40%),
+        radial-gradient(circle at 30% 80%, rgba(168, 85, 247, 0.3), transparent 45%);
+      animation: ambientMove 10s ease-in-out infinite alternate;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    @keyframes ambientMove {
+      0% { transform: scale(1) rotate(0deg); }
+      100% { transform: scale(1.15) rotate(2deg); }
+    }
+
+    /* Fonts */
+    .font-dancing { font-family: 'Dancing Script', cursive; }
+    .font-outfit { font-family: 'Outfit', sans-serif; }
+
+    /* Glow text */
+    .glow-text {
+      background: linear-gradient(90deg, #d8b4fe, #f0abfc, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textGlow 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+      0% { filter: drop-shadow(0 0 12px rgba(192, 132, 252, 0.6)) drop-shadow(0 0 25px rgba(168, 85, 247, 0.4)); }
+      100% { filter: drop-shadow(0 0 25px rgba(232, 121, 249, 0.9)) drop-shadow(0 0 50px rgba(217, 70, 239, 0.7)); }
+    }
+
+    /* Heartbeat */
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.28); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.18); }
+      70% { transform: scale(1); }
+    }
+    .animate-heartbeat {
+      animation: heartbeat 1.3s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+
+    /* Floating hearts */
+    .floating-heart {
+      position: fixed;
+      bottom: -60px;
+      pointer-events: auto;
+      cursor: pointer;
+      user-select: none;
+      z-index: 15;
+      animation: floatUp linear forwards;
+      filter: drop-shadow(0 0 8px rgba(232, 121, 249, 0.6));
+      transition: transform 0.2s ease;
+    }
+    .floating-heart:hover {
+      transform: scale(1.3);
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      15% { opacity: 0.95; }
+      85% { opacity: 0.95; }
+      100% { transform: translateY(-115vh) rotate(180deg); opacity: 0; }
+    }
+
+    /* Glass card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: all 0.4s ease;
+    }
+    .glass-card:hover {
+      border-color: rgba(232, 121, 249, 0.4);
+      box-shadow: 0 30px 80px rgba(192, 38, 211, 0.35);
+    }
+
+    /* Buttons */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(217, 70, 239, 0.45), rgba(147, 51, 234, 0.5));
+      border: 1px solid rgba(240, 171, 252, 0.4);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(217, 70, 239, 0.35);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    .btn-pill:hover {
+      background: linear-gradient(135deg, #d946ef, #a855f7);
+      box-shadow: 0 0 45px rgba(217, 70, 239, 0.7);
+      transform: translateY(-3px);
+    }
+    .btn-pill:active {
+      transform: translateY(0);
+    }
+
+    /* Layout & Sections */
+    section {
+      padding: 90px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border-radius: 9999px;
+      background: rgba(88, 28, 135, 0.4);
+      border: 1px solid rgba(192, 132, 252, 0.25);
+      color: #d8b4fe;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: clamp(55px, 12vw, 120px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin: 10px 0;
+    }
+
+    .typing-box {
+      min-height: 52px;
+      font-size: clamp(26px, 5vw, 42px);
+      color: #fae8ff;
+      margin: 10px 0 25px 0;
+    }
+
+    .cursor-blink {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background-color: #e879f9;
+      margin-left: 5px;
+      vertical-align: middle;
+      animation: blink 0.8s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .section-heading {
+      font-size: clamp(34px, 6vw, 56px);
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #f3e8ff;
+    }
+
+    /* Memories grid */
+    .memories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 22px;
+      margin-top: 35px;
+    }
+    .memory-card {
+      min-height: 240px;
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      transition: all 0.35s ease;
+    }
+    .memory-card:hover {
+      transform: scale(1.05) rotate(1deg);
+      box-shadow: 0 20px 50px rgba(217, 70, 239, 0.45);
+    }
+
+    /* Chocolate Treats */
+    .treats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .treat-card {
+      background: rgba(30, 10, 50, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 22px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .treat-card:hover, .treat-card.active {
+      border-color: #e879f9;
+      box-shadow: 0 0 30px rgba(217, 70, 239, 0.35);
+      transform: translateY(-4px);
+    }
+
+    /* Modal dialog */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      max-width: 440px;
+      width: 100%;
+      background: linear-gradient(145deg, #4c1d95, #86198f);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 28px;
+      padding: 35px 25px;
+      text-align: center;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8);
+      animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes modalPop {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Audio toggle button */
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 90;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #f5d0fe;
+      padding: 12px 18px;
+      border-radius: 50px;
+      backdrop-filter: blur(15px);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    .music-btn:hover {
+      background: rgba(217, 70, 239, 0.3);
+      border-color: #f0abfc;
+      box-shadow: 0 0 20px rgba(217, 70, 239, 0.5);
+    }
+
+    /* Mouse sparkle */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      animation: sparkleOut 0.7s forwards ease-out;
+    }
+    @keyframes sparkleOut {
+      0% { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+      100% { transform: translate(-50%, -60px) scale(1.3) rotate(45deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music Box Button -->
+  <button class="music-btn" id="musicToggle" onclick="toggleMusic()">
+    <span id="musicIcon">🎵</span>
+    <span id="musicLabel">Play Music Box</span>
+  </button>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section" id="hero">
+    <div class="badge-pill">✨ A little website made with love ✨</div>
+    <h1 class="glow-text font-outfit">DairyMilk</h1>
+    
+    <div class="animate-heartbeat" style="font-size: 80px; margin: 15px 0; cursor: pointer;" onclick="popHeart(event)">
+      💜
+    </div>
+
+    <div class="typing-box font-dancing" id="typingBox">
+      <span id="typedText"></span><span class="cursor-blink"></span>
+    </div>
+
+    <a href="#letter" class="btn-pill">
+      <span>Open My Heart</span>
+      <span style="font-size: 20px;">💌</span>
+    </a>
+  </section>
+
+  <!-- LOVE LETTER SECTION -->
+  <section id="letter">
+    <h2 class="section-heading font-outfit">For You 💜</h2>
+
+    <div class="glass-card" style="max-width: 760px; margin: 0 auto; padding: 45px 35px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 16px; margin-bottom: 25px;">
+        <div style="font-size: 18px; font-weight: 600; color: #f5d0fe;">Dearest DairyMilk, 💌</div>
+        <div style="font-size: 12px; background: rgba(217, 70, 239, 0.2); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(217, 70, 239, 0.4); color: #f0abfc;">
+          Only for you ✨
+        </div>
+      </div>
+
+      <p style="font-size: 22px; line-height: 1.8; color: #f3e8ff; margin-bottom: 20px;">
+        DairyMilk,<br><br>
+        I just want you to know something very simple...
+      </p>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <span style="display: inline-block; padding: 14px 32px; border-radius: 20px; background: linear-gradient(90deg, rgba(88,28,135,0.6), rgba(162,28,175,0.6)); border: 1px solid rgba(244,114,182,0.4); font-size: clamp(30px, 6vw, 46px); font-weight: 800; color: #fff; box-shadow: 0 0 35px rgba(244,114,182,0.35);" class="font-outfit">
+          I LOVE YOU ❤️
+        </span>
+      </div>
+
+      <p style="font-size: 22px; line-height: 1.8; color: #f3e8ff; margin-bottom: 25px;">
+        No complicated words. No big explanation. Just three little words that mean everything to me.
+      </p>
+
+      <p class="font-dancing" style="font-size: 28px; color: #f0abfc; line-height: 1.6;">
+        You are special to me, and I hope this little website makes you smile. 💜
+      </p>
+
+      <div style="margin-top: 35px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div style="color: #d8b4fe; font-size: 15px;">
+          Love sent: <strong id="loveCounter" style="color: #fff;">0 hearts</strong>
+        </div>
+        <button class="btn-pill" style="padding: 12px 26px; font-size: 15px;" onclick="sendLoveBack()">
+          Send Love Back 💕
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMORIES SECTION -->
+  <section id="memories">
+    <h2 class="section-heading font-outfit">Little Things I Love ✨</h2>
+    <p style="color: #d8b4fe; max-width: 550px; margin: 0 auto 30px auto; font-size: 16px;">
+      Click on any card to read a sweet personal note!
+    </p>
+
+    <div class="memories-grid">
+      <div class="memory-card" style="background: linear-gradient(145deg, #581c87, #a21caf);" onclick="openMemory('Your Smile 😊', 'The way your entire face lights up every time you smile melts my heart and instantly makes everything in the world brighter.', 'Pure sunshine & magic ✨')">
+        <span style="font-size: 50px; margin-bottom: 12px;">😊</span>
+        <h3 style="font-size: 22px; font-weight: 700;">Your Smile</h3>
+        <span style="font-size: 12px; margin-top: 10px; opacity: 0.8; background: rgba(0,0,0,0.25); padding: 4px 12px; border-radius: 20px;">Tap to read 💌</span>
+      </div>
+
+      <div class="memory-card" style="background: linear-gradient(145deg, #6b21a8, #c026d3);" onclick="openMemory('Your Laugh 💕', 'Your sweet, infectious laughter is without a doubt my absolute favorite sound in the universe. It makes me fall in love all over again.', 'My favorite melody 🎶')">
+        <span style="font-size: 50px; margin-bottom: 12px;">💕</span>
+        <h3 style="font-size: 22px; font-weight: 700;">Your Laugh</h3>
+        <span style="font-size: 12px; margin-top: 10px; opacity: 0.8; background: rgba(0,0,0,0.25); padding: 4px 12px; border-radius: 20px;">Tap to read 💌</span>
+      </div>
+
+      <div class="memory-card" style="background: linear-gradient(145deg, #4c1d95, #9333ea);" onclick="openMemory('Talking With You 🌙', 'Every conversation with you, whether deep late-night talks or silly little moments, is something I cherish and never want to end.', 'Time flies with you ⏳')">
+        <span style="font-size: 50px; margin-bottom: 12px;">🌙</span>
+        <h3 style="font-size: 22px; font-weight: 700;">Talking With You</h3>
+        <span style="font-size: 12px; margin-top: 10px; opacity: 0.8; background: rgba(0,0,0,0.25); padding: 4px 12px; border-radius: 20px;">Tap to read 💌</span>
+      </div>
+
+      <div class="memory-card" style="background: linear-gradient(145deg, #701a75, #d946ef);" onclick="openMemory('Being With You 🫶', 'Just being around you brings an unexplainable sense of peace, warmth, and pure happiness. Wherever you are is my favorite place.', 'Home is right beside you 🏡')">
+        <span style="font-size: 50px; margin-bottom: 12px;">🫶</span>
+        <h3 style="font-size: 22px; font-weight: 700;">Being With You</h3>
+        <span style="font-size: 12px; margin-top: 10px; opacity: 0.8; background: rgba(0,0,0,0.25); padding: 4px 12px; border-radius: 20px;">Tap to read 💌</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHOCOLATE TREATS SECTION -->
+  <section id="treats">
+    <h2 class="section-heading font-outfit">Sweet Flavours of You 🍫</h2>
+    <p style="color: #d8b4fe; font-size: 16px; margin-bottom: 25px;">
+      Click any chocolate bar to unwrap its hidden message!
+    </p>
+
+    <div class="treats-grid">
+      <div class="treat-card" onclick="toggleTreat(this)">
+        <div style="font-size: 32px; margin-bottom: 8px;">🍫</div>
+        <h4 style="font-size: 18px; font-weight: 700; color: #fff;">DairyMilk Silk</h4>
+        <div style="font-size: 12px; color: #d8b4fe; margin-bottom: 10px;">Smooth & irresistibly sweet</div>
+        <div class="treat-secret" style="display:none; font-size: 14px; color: #fae8ff; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; font-style: italic;">
+          "Just like Silk, every single moment spent with you is velvety smooth, comforting, and sweet."
+        </div>
+      </div>
+
+      <div class="treat-card" onclick="toggleTreat(this)">
+        <div style="font-size: 32px; margin-bottom: 8px;">⚡</div>
+        <h4 style="font-size: 18px; font-weight: 700; color: #fff;">DairyMilk Crackle</h4>
+        <div style="font-size: 12px; color: #d8b4fe; margin-bottom: 10px;">Sparky & fun</div>
+        <div class="treat-secret" style="display:none; font-size: 14px; color: #fae8ff; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; font-style: italic;">
+          "You bring that delightful little spark of spontaneous laughter into my daily life!"
+        </div>
+      </div>
+
+      <div class="treat-card" onclick="toggleTreat(this)">
+        <div style="font-size: 32px; margin-bottom: 8px;">🌰</div>
+        <h4 style="font-size: 18px; font-weight: 700; color: #fff;">Fruit & Nut</h4>
+        <div style="font-size: 12px; color: #d8b4fe; margin-bottom: 10px;">Rich & precious</div>
+        <div class="treat-secret" style="display:none; font-size: 14px; color: #fae8ff; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; font-style: italic;">
+          "A wholesome blend of warmth, kindness, intelligence, and an endlessly lovely heart."
+        </div>
+      </div>
+
+      <div class="treat-card" onclick="toggleTreat(this)">
+        <div style="font-size: 32px; margin-bottom: 8px;">🫧</div>
+        <h4 style="font-size: 18px; font-weight: 700; color: #fff;">DairyMilk Bubbly</h4>
+        <div style="font-size: 12px; color: #d8b4fe; margin-bottom: 10px;">Playful & cheerful</div>
+        <div class="treat-secret" style="display:none; font-size: 14px; color: #fae8ff; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px; font-style: italic;">
+          "Your bubbly personality can brighten even the darkest day with just one sweet text."
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SURPRISE SECTION -->
+  <section id="surprise" style="min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <h2 class="section-heading font-outfit">One Last Thing...</h2>
+
+    <button class="btn-pill" style="font-size: 20px; padding: 18px 45px;" onclick="revealSurprise()">
+      Click For A Surprise 💝
+    </button>
+
+    <div id="secretBox" class="glass-card" style="display: none; margin-top: 35px; max-width: 650px; padding: 45px 30px; text-align: center; border-color: rgba(244, 114, 182, 0.5); box-shadow: 0 0 50px rgba(217, 70, 239, 0.45);">
+      <div style="font-size: 40px; margin-bottom: 10px;">👑 💜 ✨</div>
+      <div class="font-outfit" style="font-size: 28px; color: #f5d0fe;">DairyMilk,</div>
+      <div class="font-outfit" style="font-size: clamp(36px, 8vw, 68px); font-weight: 800; color: #ffffff; text-shadow: 0 0 30px #f472b6; margin: 10px 0;">
+        I LOVE YOU ❤️
+      </div>
+      <div class="font-dancing" style="font-size: 36px; color: #f0abfc;">
+        Forever & Always ✨
+      </div>
+
+      <div style="margin-top: 25px; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 16px; border: 1px solid rgba(255,255,255,0.15);">
+        <p id="sweetReason" style="font-size: 16px; color: #fdf2f8; font-style: italic;">
+          "You make ordinary moments feel like fairytale memories."
+        </p>
+        <button style="margin-top: 10px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; border-radius: 20px; padding: 5px 15px; font-size: 12px; cursor: pointer;" onclick="nextSweetReason()">
+          Next Sweet Note ✨
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.12); color: #c4b5fd;">
+    <p style="font-size: 18px; margin-bottom: 8px;">
+      Made by Mauryan <span style="color: #ef4444;">❤️</span> especially for <strong style="color: #f0abfc;">DairyMilk🫶🏻</strong>
+    </p>
+    
+  </footer>
+
+  <!-- MODAL FOR MEMORY NOTES -->
+  <div class="modal-backdrop" id="memoryModal" onclick="closeMemory()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3 id="modalTitle" style="font-size: 26px; font-weight: 700; margin-bottom: 8px;" class="font-outfit"></h3>
+      <div id="modalSub" style="font-size: 13px; color: #fbcfe8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"></div>
+      <p id="modalDesc" style="font-size: 18px; line-height: 1.6; color: #fdf4ff; margin-bottom: 25px;"></p>
+      <button class="btn-pill" style="padding: 10px 25px; font-size: 14px;" onclick="closeMemory()">
+        I love this so much 💜
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* 1. TYPING EFFECT */
+    const message = "DairyMilk, I love you ❤️";
+    const typedTextElem = document.getElementById("typedText");
+    let charIdx = 0;
+    function typeEffect() {
+      if (charIdx < message.length) {
+        typedTextElem.textContent += message.charAt(charIdx);
+        charIdx++;
+        setTimeout(typeEffect, 110);
+      }
+    }
+    typeEffect();
+
+    /* 2. FLOATING HEARTS GENERATOR */
+    const heartEmojis = ['💜', '💖', '💕', '✨', '❤️', '🌸', '🍫'];
+    function spawnHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.style.left = (Math.random() * 92) + 'vw';
+      heart.style.fontSize = (18 + Math.random() * 24) + 'px';
+      heart.style.animationDuration = (7 + Math.random() * 6) + 's';
+      heart.onclick = function() {
+        playTone(1046.5, 0.1, 0.4);
+        heart.remove();
+      };
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 13000);
+    }
+    setInterval(spawnHeart, 650);
+
+    function popHeart(e) {
+      playTone(1318.5, 0.15, 0.5);
+      confetti({
+        particleCount: 15,
+        spread: 40,
+        origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight }
+      });
+    }
+
+    /* 3. MOUSE/TOUCH SPARKLES */
+    let lastSparkle = 0;
+    window.addEventListener('mousemove', function(e) {
+      const now = Date.now();
+      if (now - lastSparkle < 60) return;
+      lastSparkle = now;
+      if (Math.random() > 0.4) {
+        const sp = document.createElement('div');
+        sp.className = 'sparkle';
+        sp.textContent = ['✨', '💖', '💜', '⭐'][Math.floor(Math.random() * 4)];
+        sp.style.left = e.clientX + 'px';
+        sp.style.top = e.clientY + 'px';
+        sp.style.fontSize = (12 + Math.random() * 12) + 'px';
+        document.body.appendChild(sp);
+        setTimeout(() => sp.remove(), 700);
+      }
+    });
+
+    /* 4. WEB AUDIO ROMANTIC MUSIC BOX */
+    let audioCtx = null;
+    let isPlaying = false;
+    let musicTimer = null;
+    let noteIdx = 0;
+    const melody = [
+      { f: 523.25, d: 0.6 }, { f: 659.25, d: 0.6 }, { f: 783.99, d: 0.6 }, { f: 1046.5, d: 1.2 },
+      { f: 880.00, d: 0.6 }, { f: 783.99, d: 0.6 }, { f: 659.25, d: 1.2 },
+      { f: 587.33, d: 0.6 }, { f: 659.25, d: 0.6 }, { f: 783.99, d: 0.8 }, { f: 587.33, d: 1.2 },
+      { f: 523.25, d: 0.6 }, { f: 659.25, d: 0.6 }, { f: 783.99, d: 0.6 }, { f: 1046.5, d: 1.4 },
+      { f: 880.00, d: 0.6 }, { f: 783.99, d: 0.6 }, { f: 659.25, d: 0.8 }, { f: 523.25, d: 1.8 }
+    ];
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playTone(freq, vol, dur) {
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(vol, audioCtx.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch (err) {}
+    }
+
+    function playMusicStep() {
+      if (!isPlaying) return;
+      const current = melody[noteIdx];
+      playTone(current.f, 0.1, 1.4);
+      if (noteIdx % 4 === 0) playTone(current.f / 2, 0.05, 2.0);
+      noteIdx = (noteIdx + 1) % melody.length;
+      musicTimer = setTimeout(playMusicStep, current.d * 1000);
+    }
+
+    function toggleMusic() {
+      initAudio();
+      isPlaying = !isPlaying;
+      const label = document.getElementById("musicLabel");
+      const icon = document.getElementById("musicIcon");
+      if (isPlaying) {
+        label.textContent = "Music Playing 🎶";
+        icon.textContent = "🔊";
+        playMusicStep();
+      } else {
+        label.textContent = "Play Music Box";
+        icon.textContent = "🎵";
+        clearTimeout(musicTimer);
+      }
+    }
+
+    /* 5. LOVE COUNTER */
+    let loveCount = 0;
+    function sendLoveBack() {
+      loveCount++;
+      document.getElementById("loveCounter").textContent = loveCount + (loveCount === 1 ? " heart" : " hearts");
+      playTone(880, 0.15, 0.8);
+      confetti({
+        particleCount: 30,
+        spread: 60,
+        origin: { y: 0.6 },
+        colors: ['#c084fc', '#f472b6', '#ffffff']
+      });
+    }
+
+    /* 6. MEMORIES MODAL */
+    function openMemory(title, desc, sub) {
+      playTone(1046.5, 0.12, 0.6);
+      document.getElementById("modalTitle").textContent = title;
+      document.getElementById("modalDesc").textContent = `"${desc}"`;
+      document.getElementById("modalSub").textContent = sub;
+      document.getElementById("memoryModal").style.display = "flex";
+      confetti({ particleCount: 20, spread: 50, origin: { y: 0.5 } });
+    }
+    function closeMemory() {
+      document.getElementById("memoryModal").style.display = "none";
+    }
+
+    /* 7. CHOCOLATE UNWRAP */
+    function toggleTreat(card) {
+      playTone(987.7, 0.1, 0.4);
+      const secret = card.querySelector('.treat-secret');
+      if (secret.style.display === 'none') {
+        secret.style.display = 'block';
+        card.classList.add('active');
+      } else {
+        secret.style.display = 'none';
+        card.classList.remove('active');
+      }
+    }
+
+    /* 8. SURPRISE REVEAL & NOTES */
+    const sweetNotes = [
+      "You make ordinary moments feel like fairytale memories.",
+      "Your kindness and gentle heart inspire me every day.",
+      "No matter how busy life gets, thinking of you brings pure peace.",
+      "You are my favorite notification and my favorite thought.",
+      "You're as sweet as DairyMilk Silk and as radiant as the stars!"
+    ];
+    let noteIndex = 0;
+
+    function revealSurprise() {
+      const box = document.getElementById("secretBox");
+      box.style.display = "block";
+      box.scrollIntoView({ behavior: 'smooth' });
+
+      // Celebration chords
+      [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 0.14, 1.2), i * 100);
+      });
+
+      // Confetti burst
+      confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.6 },
+        colors: ['#e879f9', '#c084fc', '#f472b6', '#ffffff', '#a855f7']
+      });
+    }
+
+    function nextSweetReason() {
+      noteIndex = (noteIndex + 1) % sweetNotes.length;
+      document.getElementById("sweetReason").textContent = `"${sweetNotes[noteIndex]}"`;
+      playTone(1174.6, 0.1, 0.4);
+    }
+  </script>
+</body>
+</html>
